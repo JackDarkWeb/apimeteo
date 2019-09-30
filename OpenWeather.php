@@ -15,34 +15,42 @@ class OpenWeather
      * @param string $city
      * @return array
      */
-    public function getForeCast(string $city):array
+    public function getForeCast(string $city)
     {
         $endpoint = "forecast/daily?q=$city";
 
         $curl = $this->callApi($endpoint);
 
         if ($curl['err']) {
-            echo "cURL Error #:" . $curl['err'];
+            die("cURL Error #:" . $curl['err']);
         }
+
         $data = $curl['data'];
 
-        $response = [];
-        foreach ($data['list'] as $day){
-            $response[] =  [
-                'temp' => $day['temp']['day'],
-                'description' => $day['weather'][0]['description'],
-                'main' => $day['weather'][0]['main'],
-                'date' => date('d/m/Y', $day['dt']),
-            ];
+        if($data['message']){
+
+            die($data['message']);
+
+        }else {
+
+            $response = [];
+            foreach ($data['list'] as $day) {
+                $response[] = [
+                    'temp' => $day['temp']['day'],
+                    'description' => $day['weather'][0]['description'],
+                    'main' => $day['weather'][0]['main'],
+                    'date' => date('d/m/Y', $day['dt']),
+                ];
+            }
+            return $response;
         }
-           return $response;
     }
 
     /**
      * @param string $city
      * @return array
      */
-    public function getToDay(string $city):array {
+    public function getToDay(string $city) {
 
         $endpoint = "weather?q=$city";
 
@@ -50,18 +58,26 @@ class OpenWeather
 
 
         if ($curl['err']) {
-            echo "cURL Error #:" . $curl['err'];
+             die("cURL Error #:" . $curl['err']);
         }
+
         $data = $curl['data'];
 
-        return  [
-            'temp' => $data['main']['temp'],
-            'description' => $data['weather'][0]['description'],
-            'image' => $data['weather'][0]['icon'],
-            'city' => $data['name'],
-            'country' => $data['sys']['country'],
-            'date' => date('d/m/Y à H:i:s', $data['dt']),
-        ];
+        if($data['message']){
+
+            die($data['message']);
+
+        }else{
+
+            return  [
+                'temp' => $data['main']['temp'],
+                'description' => $data['weather'][0]['description'],
+                'image' => $data['weather'][0]['icon'],
+                'city' => $data['name'],
+                'country' => $data['sys']['country'],
+                'date' => date('d/m/Y à H:i:s', $data['dt']),
+            ];
+        }
 
     }
 
