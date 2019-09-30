@@ -27,7 +27,7 @@ class OpenWeather
 
         $data = $curl['data'];
 
-        if($data['message']){
+        if(isset($data['message'])){
 
             die($data['message']);
 
@@ -63,7 +63,7 @@ class OpenWeather
 
         $data = $curl['data'];
 
-        if($data['message']){
+        if(isset($data['message'])){
 
             die($data['message']);
 
